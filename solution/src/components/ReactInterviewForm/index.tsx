@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 
-const ReactInterviewForm = () => {
+const ReactInterviewForm: FC = () => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
 
