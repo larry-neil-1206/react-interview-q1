@@ -1,13 +1,15 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
+import { getLocations, isNameValid } from "../../mock-api/apis";
 
 const ReactInterviewForm: FC = () => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
-  const [locations, setLocations] = useState([]);
+  const [locations, setLocations] = useState<string[]>([]);
   const [data, setData] = useState([
     { name: "John Doe", location: "Location 1" },
     { name: "John Doe", location: "Location 1" },
   ]);
+  const [isNameTaken, setIsNameTaken] = useState(false);
 
   const handleClear = () => {
     // Clear the form
@@ -16,6 +18,21 @@ const ReactInterviewForm: FC = () => {
   const handleAdd = () => {
     // Add the form data
   };
+
+  const onNameChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newName = e.target.value;
+    setName(newName);
+    const nameTaken = await isNameValid(newName);
+    setIsNameTaken(nameTaken);
+  };
+  const fetchLocations = async () => {
+    const locations = await getLocations();
+    setLocations(locations);
+  };
+  useEffect(() => {
+    fetchLocations();
+  }, []);
+
   return (
     <>
       <form className="m-5 p-5">
@@ -31,8 +48,13 @@ const ReactInterviewForm: FC = () => {
             id="name"
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={onNameChange}
           />
+          {isNameTaken && (
+            <p className="text-red-500 text-xs italic">
+              This name is already taken.
+            </p>
+          )}
         </div>
         <div className="mb-4">
           <label
