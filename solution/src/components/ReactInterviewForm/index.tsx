@@ -5,18 +5,20 @@ const ReactInterviewForm: FC = () => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [locations, setLocations] = useState<string[]>([]);
-  const [data, setData] = useState([
-    { name: "John Doe", location: "Location 1" },
-    { name: "John Doe", location: "Location 1" },
-  ]);
+  const [data, setData] = useState<{
+    name: string;
+    location: string;
+  }[]>([]);
   const [isNameTaken, setIsNameTaken] = useState(false);
 
-  const handleClear = () => {
-    // Clear the form
+  const handleClear = (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+    setData([]);
   };
 
-  const handleAdd = () => {
-    // Add the form data
+  const handleAdd = (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+    setData(prevData => [...prevData, { name, location }])
   };
 
   const onNameChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,13 +82,13 @@ const ReactInterviewForm: FC = () => {
         <div className="mb-4 flex justify-end mt-2">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-            onClick={() => handleClear()}
+            onClick={handleClear}
           >
             Clear
           </button>
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => handleAdd()}
+            onClick={handleAdd}
           >
             Add
           </button>
